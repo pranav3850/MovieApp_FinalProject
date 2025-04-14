@@ -1,0 +1,57 @@
+<div th:replace="~{fragments/header}"></div>
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-4">
+            <img th:src="${movie.posterPath != null} ?
+                'https://image.tmdb.org/t/p/w500' + ${movie.posterPath} :
+                '/images/no-image.jpg'"
+                 class="movie-detail-poster img-fluid" alt="Movie poster">
+        </div>
+        <div class="col-md-8">
+            <h1 class="movie-detail-title" th:text="${movie.title}"></h1>
+
+            <p class="movie-meta">
+                <strong>Release Date:</strong>
+                <span th:text="${movie.releaseDate}"></span>
+            </p>
+
+            <p class="movie-meta">
+                <strong>Rating:</strong>
+                <span th:text="${movie.voteAverage}"></span>/10
+                <i class="fas fa-star text-warning ms-1"></i>
+            </p>
+
+            <h4>Overview</h4>
+            <p th:text="${movie.overview}"></p>
+
+            <div class="mt-4">
+                <form th:if="${!isFavorite}" th:action="@{/favorites/add}" method="post">
+                    <!-- Required hidden fields -->
+                    <input type="hidden" name="id" th:value="${movie.id}">
+                    <input type="hidden" name="title" th:value="${movie.title}">
+                    <input type="hidden" name="overview" th:value="${movie.overview}">
+                    <input type="hidden" name="posterPath" th:value="${movie.posterPath}">
+                    <input type="hidden" name="releaseDate" th:value="${movie.releaseDate}">
+                    <input type="hidden" name="voteAverage" th:value="${movie.voteAverage}">
+
+                    <button type="submit" class="btn btn-favorite">
+                        <i class="fas fa-heart me-2"></i>Add to Favorites
+                    </button>
+                </form>
+
+                <form th:if="${isFavorite}" th:action="@{/favorites/remove/{id}(id=${movie.id})}" method="post">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash-alt"></i> Remove from Favorites
+                    </button>
+                </form>
+
+                <a href="/" class="btn btn-secondary mt-3">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Home
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer}"></div>
